@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>侨乡籍贯占比</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">侨乡籍贯占比</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">闽粤合计68%　数据来源：全国侨情普查</div>
+</div>
+<script>
+var chart = echarts.init(document.getElementById('chart'));
+var option = {
+  tooltip:{trigger:'item',formatter:function(p){return p.name+'<br/>华侨华人：'+p.value+'万人<br/>占比：'+p.percent+'%';}},
+  graphic:{type:'text',left:'center',top:'center',style:{text:'闽粤\n68%',fill:'#c49a6c',fontSize:20,fontWeight:'bold',fontFamily:'Microsoft YaHei',lineHeight:24}},
+  series:[{
+    type:'pie',radius:['48%','76%'],
+    data:[
+      {value:2500,name:'广东 42%',itemStyle:{color:'#c49a6c'}},
+      {value:1600,name:'福建 26%',itemStyle:{color:'#6a9bd8'}},
+      {value:370,name:'海南 6%',itemStyle:{color:'#7cb88a'}},
+      {value:300,name:'广西 5%',itemStyle:{color:'#d4a5a5'}},
+      {value:250,name:'云南 4%',itemStyle:{color:'#9e8cb8'}},
+      {value:200,name:'浙江 3%',itemStyle:{color:'#e6b563'}},
+      {value:190,name:'台湾 3%',itemStyle:{color:'#8ab6c9'}},
+      {value:790,name:'其他 11%',itemStyle:{color:'#d8d0c4'}}
+    ],
+    label:{color:'#5c5248',fontSize:10},
+    labelLine:{lineStyle:{color:'#d8d0c4'}},
+    itemStyle:{borderColor:'#f8f4ec',borderWidth:3},
+    emphasis:{scaleSize:6,shadowColor:'rgba(0,0,0,0.12)',shadowBlur:10}
+  }]
+
+};
+chart.setOption(option);
+window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>

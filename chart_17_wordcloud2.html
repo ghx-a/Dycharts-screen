@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>侨批文化与侨汇历史关键词</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">侨批文化与侨汇历史关键词</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">基于侨批行业兴衰、侨汇数据、亲属关系等文本整理</div>
+</div>
+<script>
+var chart = echarts.init(document.getElementById('chart'));
+
+var data = [{"name": "侨批", "value": 900}, {"name": "侨汇", "value": 850}, {"name": "侨批局", "value": 600}, {"name": "水客", "value": 400}, {"name": "银信", "value": 380}, {"name": "赡养", "value": 500}, {"name": "家书", "value": 450}, {"name": "汇款", "value": 480}, {"name": "抗战", "value": 420}, {"name": "救国", "value": 400}, {"name": "南侨总会", "value": 350}, {"name": "暗批", "value": 200}, {"name": "厦门", "value": 460}, {"name": "汕头", "value": 440}, {"name": "唐宋", "value": 180}, {"name": "明清", "value": 200}, {"name": "兴盛期", "value": 300}, {"name": "衰落期", "value": 250}, {"name": "消亡", "value": 200}, {"name": "中国银行", "value": 280}, {"name": "核心圈层", "value": 350}, {"name": "子女", "value": 300}, {"name": "父母", "value": 320}, {"name": "夫妻", "value": 250}, {"name": "兄弟姐妹", "value": 200}, {"name": "修建房屋", "value": 280}, {"name": "兴办教育", "value": 260}, {"name": "基建公益", "value": 220}, {"name": "救国捐资", "value": 230}, {"name": "投资兴业", "value": 150}, {"name": "红砖厝", "value": 180}, {"name": "祠堂", "value": 160}, {"name": "私塾", "value": 140}, {"name": "新学", "value": 130}, {"name": "大学", "value": 150}, {"name": "航空救国", "value": 220}, {"name": "南侨机工", "value": 300}, {"name": "认购公债", "value": 170}, {"name": "军需", "value": 160}, {"name": "银元", "value": 250}, {"name": "美元", "value": 300}, {"name": "国币", "value": 180}, {"name": "赡养家属", "value": 350}, {"name": "亲友问候", "value": 250}, {"name": "商业时局", "value": 200}, {"name": "公益救国", "value": 200}, {"name": "归口管理", "value": 160}, {"name": "邮政", "value": 180}, {"name": "银行", "value": 220}, {"name": "报平安", "value": 180}, {"name": "侨批信件", "value": 300}, {"name": "百年兴衰", "value": 280}, {"name": "侨资企业", "value": 160}, {"name": "一·二八事变", "value": 150}, {"name": "七七事变", "value": 200}, {"name": "太平洋战争", "value": 180}, {"name": "抗战胜利", "value": 200}];
+var colorList = ['#c49a6c','#6a9bd8','#7cb88a','#d4a5a5','#9e8cb8','#e6b563','#8ab6c9','#bc9a86','#8a9a7b','#d8b4a6','#ae9cc0','#94c4d6'];
+var option = {
+  tooltip:{show:true,formatter:function(p){return p.name+': '+p.value;}},
+  series:[{
+    type:'wordCloud',
+    shape:'circle',
+    left:'center',
+    top:'center',
+    width:'95%',
+    height:'95%',
+    sizeRange:[14,60],
+    rotationRange:[-30,30],
+    rotationStep:15,
+    gridSize:8,
+    drawOutOfBound:false,
+    textStyle:{
+      fontFamily:'Microsoft YaHei, Noto Sans SC, sans-serif',
+      fontWeight:'bold',
+      color:function(){return colorList[Math.floor(Math.random()*colorList.length)];}
+    },
+    emphasis:{
+      focus:'self',
+      textStyle:{
+        shadowBlur:10,
+        shadowColor:'rgba(0,0,0,0.15)'
+      }
+    },
+    data:data
+  }]
+};
+
+chart.setOption(option);
+window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>

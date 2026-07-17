@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核心侨乡城市海外侨胞规模</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:200px}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">核心侨乡城市海外侨胞规模</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">数据来源：江门、泉州、潮汕、梅州等城市侨务统计</div>
+</div>
+<script>
+window.addEventListener('load', function() {
+  var chartDom = document.getElementById('chart');
+  var w = chartDom.offsetWidth || 600;
+  var h = chartDom.offsetHeight || 350;
+  var chart = echarts.init(chartDom, null, {width: w, height: h});
+  var option = {
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>海外侨胞/港澳台同胞：'+p[0].value+'万人';}},
+    grid:{left:'14%',right:'8%',top:'12%',bottom:'24%'},
+    xAxis:{type:'category',data:['潮汕','泉州','梅州','江门','福州','温州','文昌','汕尾','青田','和顺','天门'],axisLabel:{color:'#5c5248',fontSize:11,rotate:35},axisLine:{lineStyle:{color:'#d8d0c4'}},axisTick:{show:false}},
+    yAxis:{type:'value',name:'万人',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
+    series:[{
+      type:'bar',barWidth:'55%',
+      data:[
+        {value:1500,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#d4a96f'},{offset:1,color:'#b88a4e'}]}}},
+        {value:948,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#7aabe0'},{offset:1,color:'#5a8bc8'}]}}},
+        {value:500,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#8cc89a'},{offset:1,color:'#6ba878'}]}}},
+        {value:530,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#dab5b5'},{offset:1,color:'#c49595'}]}}},
+        {value:460,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#ae9cc0'},{offset:1,color:'#8e7ca0'}]}}},
+        {value:83.6,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#e6c573'},{offset:1,color:'#c8a54e'}]}}},
+        {value:120,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#94c4d6'},{offset:1,color:'#74a4b8'}]}}},
+        {value:140,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#d8a09f'},{offset:1,color:'#bc8080'}]}}},
+        {value:38.1,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#9aaa8b'},{offset:1,color:'#7a8a6b'}]}}},
+        {value:30,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#dabaa6'},{offset:1,color:'#bc9a86'}]}}},
+        {value:28,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#b0a79a'},{offset:1,color:'#90877a'}]}}}
+      ],
+      label:{show:true,position:'top',color:'#5c5248',fontSize:10,formatter:function(p){return p.value;}},
+      itemStyle:{borderRadius:[4,4,0,0],shadowColor:'rgba(0,0,0,0.08)',shadowBlur:6,shadowOffsetY:3}
+    }]
+  };
+  chart.setOption(option);
+  setTimeout(function(){chart.resize();}, 100);
+  window.addEventListener('resize',function(){chart.resize();});
+});
+</script>
+</body>
+</html>

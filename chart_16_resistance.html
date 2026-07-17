@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>救国侨批时序</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">救国侨批时序</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">1932萌芽→1937爆发→1941低谷→1945回落　来源：救国侨批档案</div>
+</div>
+<script>
+var chart = echarts.init(document.getElementById('chart'));
+var option = {
+  tooltip:{trigger:'item',formatter:function(p){return p.data.year+'<br/>'+p.data.event;}},
+  xAxis:{type:'value',show:false,min:1930,max:1947},
+  yAxis:{type:'value',show:false,min:0,max:100},
+  series:[{
+    type:'line',symbolSize:18,
+    data:[
+      {value:[1932,20],year:'1932',event:'一·二八事变，抵制日货，救国侨批萌芽'},
+      {value:[1937,80],year:'1937',event:'七七事变，全面抗战，救国侨批爆发'},
+      {value:[1938,95],year:'1938',event:'南侨总会成立，航空救国运动，数量巅峰'},
+      {value:[1941,15],year:'1941',event:'太平洋战争爆发，日军占东南亚，转入暗批'},
+      {value:[1945,40],year:'1945',event:'抗战胜利，救国主题回落，总量回升'}
+    ],
+    lineStyle:{color:'#c49a6c',width:3,shadowColor:'rgba(196,154,108,0.3)',shadowBlur:8,shadowOffsetY:4},
+    itemStyle:{color:'#c49a6c',borderColor:'#fff',borderWidth:2},
+    areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(196,154,108,0.25)'},{offset:1,color:'rgba(196,154,108,0.02)'}])},
+    label:{show:true,position:'top',color:'#4a4035',fontSize:11,fontWeight:'bold',formatter:function(p){return p.data.year;}}
+  }]
+
+};
+chart.setOption(option);
+window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>

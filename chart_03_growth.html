@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全球华侨华人百年增长</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">全球华侨华人百年增长</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">数据来源：国务院侨务办公室、世界华侨华人报告</div>
+</div>
+<script>
+var chart = echarts.init(document.getElementById('chart'));
+var option = {
+  tooltip:{trigger:'axis',formatter:function(p){return p[0].name+'<br/>华侨华人总数：'+p[0].value+'万人';}},
+  grid:{left:'10%',right:'8%',top:'12%',bottom:'12%'},
+  xAxis:{type:'category',data:['1980年代初','2007-2008年','2016-2017年','2020年'],axisLabel:{color:'#5c5248'},axisLine:{lineStyle:{color:'#d8d0c4'}}},
+  yAxis:{type:'value',name:'万人',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
+  series:[{
+    type:'line',smooth:true,
+    data:[2300,4500,5800,6000],
+    areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(196,154,108,0.35)'},{offset:1,color:'rgba(196,154,108,0.02)'}])},
+    lineStyle:{width:3,color:'#c49a6c',shadowColor:'rgba(196,154,108,0.3)',shadowBlur:8,shadowOffsetY:4},
+    itemStyle:{color:'#c49a6c',borderColor:'#fff',borderWidth:2},
+    symbol:'circle',symbolSize:10,
+    label:{show:true,position:'top',color:'#5c5248',formatter:function(p){return p.value+'万';}}
+  }]
+
+};
+chart.setOption(option);
+window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>

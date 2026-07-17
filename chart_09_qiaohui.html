@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>侨汇百年金额时序</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
+  background:#f8f4ec;
+  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+.chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">侨汇百年金额时序</div>
+  <div class="chart" id="chart"></div>
+  <div class="subtitle">从清末3000万银元到2000年66.1亿美元　来源：侨汇历史文献</div>
+</div>
+<script>
+var chart = echarts.init(document.getElementById('chart'));
+var option = {
+  tooltip:{trigger:'axis',formatter:function(p){var d=p[0];return d.axisValue+'<br/>侨汇金额：'+d.data.desc;}},
+  grid:{left:'12%',right:'8%',top:'10%',bottom:'15%'},
+  xAxis:{type:'category',data:['清末','民国战前','抗战期','战后恢复','新中国','1978','1990','2000'],axisLabel:{color:'#5c5248',fontSize:11},axisLine:{lineStyle:{color:'#d8d0c4'}}},
+  yAxis:{type:'value',name:'亿美元(折算)',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
+  series:[{
+    type:'line',smooth:true,
+    data:[
+      {value:0.4,desc:'3000-5000万银元/年'},
+      {value:1.35,desc:'1.2-1.5亿美元/年'},
+      {value:1.625,desc:'13亿国币(8年合计)'},
+      {value:3,desc:'约3亿美元/年'},
+      {value:1.46,desc:'11.7亿美元(8年合计)'},
+      {value:2.77,desc:'2.77亿美元'},
+      {value:18.7,desc:'18.7亿美元'},
+      {value:66.1,desc:'66.1亿美元'}
+    ],
+    areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(196,154,108,0.35)'},{offset:1,color:'rgba(196,154,108,0.02)'}])},
+    lineStyle:{width:3,color:'#c49a6c',shadowColor:'rgba(196,154,108,0.3)',shadowBlur:8,shadowOffsetY:4},
+    itemStyle:{color:'#c49a6c',borderColor:'#fff',borderWidth:2},
+    symbol:'circle',symbolSize:10,
+    label:{show:true,position:'top',color:'#5c5248',fontSize:10,formatter:function(p){return p.value;}}
+  }]
+
+};
+chart.setOption(option);
+window.addEventListener('resize',function(){chart.resize();});
+</script>
+</body>
+</html>
