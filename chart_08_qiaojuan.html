@@ -3,46 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>侨乡村落侨眷占比</title>
+<title>侨乡村落本地人口与海外侨亲规模双轴对比图</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;width:100%;overflow:hidden}
-body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
-  background:#f8f4ec;
-  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
-.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
-.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
-  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
-.chart{width:100%;flex:1;min-height:0}
-.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
-  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;background:#f8f4e6;}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:10px 24px 8px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+#chart{width:100%;height:320px;flex:1}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.title{animation:fadeInDown 0.8s ease-out}
+.subtitle{animation:fadeInUp 0.8s ease-out 0.4s both}
+#chart{animation:scaleIn 1s ease-out 0.2s both}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="title">侨乡村落侨眷占比</div>
-  <div class="chart" id="chart"></div>
-  <div class="subtitle">马湾镇侨眷占比最高达83.7%　来源：各村落侨情调研</div>
+  <div class="title">侨乡村落本地人口与海外侨亲规模双轴对比图</div>
+  <div id="chart"></div>
+  <div class="subtitle">数据来源：江门日报、新华网、人民网、各地侨乡调研报道</div>
 </div>
 <script>
-var chart = echarts.init(document.getElementById('chart'));
-var option = {
-  tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){var v=p[0];return v.name+'<br/>侨眷占比：'+v.value+'%';}},
-  grid:{left:'16%',right:'10%',top:'8%',bottom:'8%'},
-  xAxis:{type:'value',max:100,axisLabel:{color:'#5c5248',formatter:'{value}%'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
-  yAxis:{type:'category',data:['马湾镇','坭湾村','黎塘村','梧林社区','前美村','和顺镇','鸿渐村'],axisLabel:{color:'#5c5248',fontSize:11},axisLine:{lineStyle:{color:'#d8d0c4'}}},
-  series:[{
-    type:'bar',barWidth:'55%',
-    data:[83.7,44,0,0,0,0,0],
-    itemStyle:{color:new echarts.graphic.LinearGradient(1,0,0,0,[{offset:0,color:'#c49a6c'},{offset:1,color:'#e0c9a8'}]),borderRadius:[0,6,6,0],shadowColor:'rgba(0,0,0,0.08)',shadowBlur:6,shadowOffsetX:3},
-    label:{show:true,position:'right',color:'#5c5248',formatter:function(p){return p.value>0?p.value+'%':'';}}
-  }]
+(function(){
+  function init(){
+    var dom = document.getElementById('chart');
+    if(!dom || typeof echarts === 'undefined'){
+      setTimeout(init, 100);
+      return;
+    }
+    var h = dom.offsetHeight || 320;
+    var w = dom.offsetWidth || 600;
+    var chart = echarts.init(dom, null, {width: w, height: h});
+    chart.setOption({
+animation:true,
+animationDuration:2200,
+animationDurationUpdate:900,
+animationEasing:'cubicOut',
+animationEasingUpdate:'cubicInOut',
+animationDelay:function(idx){return idx*120;},
+animationDelayUpdate:function(idx){return idx*60;},
 
-};
-chart.setOption(option);
-window.addEventListener('resize',function(){chart.resize();});
+      tooltip:{
+        trigger:'axis',
+        axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(248,244,230,0.95)',
+        borderColor:'rgba(196,154,108,0.4)',
+        textStyle:{color:'#4a4035'},
+        formatter:function(params){
+          var p1=params[0], p2=params[1];
+          var res='<b>'+p1.name+'</b><br/>';
+          res+=p1.marker+' 本地人口：'+p1.value+'人<br/>';
+          res+=p2.marker+' 海外侨亲：'+p2.value+'人';
+          return res;
+        }
+      },
+      legend:{
+        data:['本地人口','海外侨亲'],
+        top:0,
+        textStyle:{color:'#5c5248',fontSize:12}
+      },
+      grid:{left:'18%',right:'18%',top:'14%',bottom:'22%'},
+      xAxis:{
+        type:'category',
+        data:['黎塘村\n(广东恩平)','梧林社区\n(福建晋江)','前美村\n(广东汕头)','鸿渐村\n(福建漳州)','和顺镇\n(云南保山)','坭湾村\n(浙江青田)','马湾镇\n(湖北天门)'],
+        axisLabel:{color:'#5c5248',fontSize:11,interval:0,lineHeight:14},
+        axisLine:{lineStyle:{color:'#d8d0c4'}},
+        axisTick:{show:false}
+      },
+      yAxis:[
+        {
+          type:'value',
+          name:'本地人口（人）',
+          position:'left',
+          nameTextStyle:{color:'#5c5248',align:'right'},
+          axisLabel:{color:'#5c5248',formatter:function(v){return v>=10000?(v/10000)+'万':v;}},
+          splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}
+        },
+        {
+          type:'value',
+          name:'海外侨亲（人）',
+          position:'right',
+          nameTextStyle:{color:'#5c5248',align:'left'},
+          axisLabel:{color:'#5c5248',formatter:function(v){return v>=10000?(v/10000)+'万':v;}},
+          splitLine:{show:false}
+        }
+      ],
+      series:[
+        {
+          name:'本地人口',
+          type:'bar',
+      animationDelay:function(idx){return idx*150;},animationEasing:'elasticOut',animationDuration:1800,
+          barWidth:22,
+          itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#c49a6c'},{offset:1,color:'#a87b4a'}]},borderRadius:[4,4,0,0]},
+          label:{show:true,position:'top',color:'#5c5248',fontSize:10,formatter:function(p){return p.value>=10000?(p.value/10000)+'万':p.value;}},
+          data:[1100,1800,7000,3000,7000,125,41000]
+        },
+        {
+          name:'海外侨亲',
+          type:'bar',
+      animationDelay:function(idx){return idx*150;},animationEasing:'elasticOut',animationDuration:1800,
+          yAxisIndex:1,
+          barWidth:22,
+          itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#7aabe0'},{offset:1,color:'#5a8bc8'}]},borderRadius:[4,4,0,0]},
+          label:{show:true,position:'top',color:'#5c5248',fontSize:10,formatter:function(p){return p.value>=10000?(p.value/10000)+'万':p.value;}},
+          data:[4000,18000,10000,1300,30000,55,34300]
+        }
+      ]
+    });
+    setTimeout(function(){chart.resize();}, 200);
+    window.addEventListener('resize',function(){chart.resize();});
+  }
+  if(document.readyState === 'complete'){init();} else {window.addEventListener('load', init);}
+  setTimeout(init, 500);
+})();
 </script>
 </body>
 </html>

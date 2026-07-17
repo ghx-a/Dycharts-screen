@@ -10,28 +10,53 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;width:100%;overflow:hidden}
 body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
-  background:#f8f4ec;
-  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+  background:#f8f4e6;
+  }
 .wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
 .title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
   border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
-.chart{width:100%;flex:1;min-height:0}
+#chart{width:100%;height:320px;flex:1}
 .subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
   border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.title{animation:fadeInDown 0.8s ease-out}
+.subtitle{animation:fadeInUp 0.8s ease-out 0.4s both}
+#chart{animation:scaleIn 1s ease-out 0.2s both}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="title">侨批内容四大主题</div>
-  <div class="chart" id="chart"></div>
+  <div id="chart"></div>
   <div class="subtitle">赡养类占50%，是侨批最核心功能　来源：侨批内容分析</div>
 </div>
 <script>
-var chart = echarts.init(document.getElementById('chart'));
-var option = {
+(function(){
+  function init(){
+    var dom = document.getElementById('chart');
+    if(!dom || typeof echarts === 'undefined'){
+      setTimeout(init, 100);
+      return;
+    }
+    var h = dom.offsetHeight || 320;
+    var w = dom.offsetWidth || 600;
+    var chart = echarts.init(dom, null, {width: w, height: h});
+    chart.setOption({
+animation:true,
+animationDuration:2200,
+animationDurationUpdate:900,
+animationEasing:'cubicOut',
+animationEasingUpdate:'cubicInOut',
+animationDelay:function(idx){return idx*120;},
+animationDelayUpdate:function(idx){return idx*60;},
+
   tooltip:{trigger:'item',formatter:function(p){return p.name+'<br/>占比：'+p.value+'%<br/>'+p.data.desc;}},
   series:[{
-    type:'pie',radius:['30%','72%'],roseType:'area',
+    type:'pie',
+      animationDelay:function(idx){return idx*200;},animationEasing:'expOut',animationDuration:1600,radius:['30%','72%'],roseType:'area',
     data:[
       {value:50,name:'赡养与汇款',desc:'汇款金额、家用开支',itemStyle:{color:'#c49a6c'}},
       {value:25,name:'亲友问候',desc:'报平安、询近况',itemStyle:{color:'#6a9bd8'}},
@@ -40,13 +65,17 @@ var option = {
     ],
     label:{color:'#5c5248',fontSize:11,formatter:function(p){return p.name+'\n'+p.value+'%';}},
     labelLine:{lineStyle:{color:'#d8d0c4'}},
-    itemStyle:{borderColor:'#f8f4ec',borderWidth:3},
+    itemStyle:{borderColor:'#f8f4e6',borderWidth:3},
     emphasis:{scaleSize:10,shadowColor:'rgba(0,0,0,0.12)',shadowBlur:10}
   }]
 
-};
-chart.setOption(option);
-window.addEventListener('resize',function(){chart.resize();});
+    });
+    setTimeout(function(){chart.resize();}, 200);
+    window.addEventListener('resize',function(){chart.resize();});
+  }
+  if(document.readyState === 'complete'){init();} else {window.addEventListener('load', init);}
+  setTimeout(init, 500);
+})();
 </script>
 </body>
 </html>

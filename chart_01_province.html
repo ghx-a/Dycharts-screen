@@ -8,51 +8,76 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;width:100%;overflow:hidden}
-body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
-  background:#f8f4ec;
-  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;background:#f8f4e6;}
 .wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
-.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
-  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
-.chart{width:100%;flex:1;min-height:200px}
-.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
-  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+#chart{width:100%;height:300px;flex:1}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.title{animation:fadeInDown 0.8s ease-out}
+.subtitle{animation:fadeInUp 0.8s ease-out 0.4s both}
+#chart{animation:scaleIn 1s ease-out 0.2s both}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="title">各省侨乡海外侨胞数量</div>
-  <div class="chart" id="chart"></div>
+  <div id="chart"></div>
   <div class="subtitle">数据来源：广东、福建、浙江、海南、湖北侨务统计</div>
 </div>
 <script>
-window.addEventListener('load', function() {
-  var chartDom = document.getElementById('chart');
-  var w = chartDom.offsetWidth || 600;
-  var h = chartDom.offsetHeight || 350;
-  var chart = echarts.init(chartDom, null, {width: w, height: h});
-  var option = {
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>海外侨胞：'+p[0].value+'万人';}},
-    grid:{left:'12%',right:'8%',top:'14%',bottom:'15%'},
-    xAxis:{type:'category',data:['广东','福建','浙江','海南','湖北天门'],axisLabel:{color:'#5c5248',fontSize:13},axisLine:{lineStyle:{color:'#d8d0c4'}},axisTick:{show:false}},
-    yAxis:{type:'value',name:'万人',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
-    series:[{
-      type:'bar',barWidth:'48%',
-      data:[
-        {value:3000,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#d4a96f'},{offset:1,color:'#b88a4e'}]}}},
-        {value:2000,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#7aabe0'},{offset:1,color:'#5a8bc8'}]}}},
-        {value:205,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#8cc89a'},{offset:1,color:'#6ba878'}]}}},
-        {value:120,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#dab5b5'},{offset:1,color:'#c49595'}]}}},
-        {value:28,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#ae9cc0'},{offset:1,color:'#8e7ca0'}]}}}
-      ],
-      label:{show:true,position:'top',color:'#5c5248',fontSize:12,formatter:function(p){return p.value;}},
-      itemStyle:{borderRadius:[6,6,0,0],shadowColor:'rgba(0,0,0,0.08)',shadowBlur:6,shadowOffsetY:3}
-    }]
-  };
-  chart.setOption(option);
-  setTimeout(function(){chart.resize();}, 100);
-  window.addEventListener('resize',function(){chart.resize();});
-});
+(function(){
+  function init(){
+    var dom = document.getElementById('chart');
+    if(!dom || typeof echarts === 'undefined'){
+      setTimeout(init, 100);
+      return;
+    }
+    var h = dom.offsetHeight;
+    if(h < 50) h = 300;
+    var w = dom.offsetWidth;
+    if(w < 50) w = 600;
+    var chart = echarts.init(dom, null, {width: w, height: h});
+    chart.setOption({
+animation:true,
+animationDuration:2200,
+animationDurationUpdate:900,
+animationEasing:'cubicOut',
+animationEasingUpdate:'cubicInOut',
+animationDelay:function(idx){return idx*120;},
+animationDelayUpdate:function(idx){return idx*60;},
+
+      tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:function(p){return p[0].name+'<br/>海外侨胞：'+p[0].value+'万人';}},
+      grid:{left:'12%',right:'8%',top:'14%',bottom:'15%'},
+      xAxis:{type:'category',data:['广东','福建','浙江','海南','湖北天门'],axisLabel:{color:'#5c5248',fontSize:13},axisLine:{lineStyle:{color:'#d8d0c4'}},axisTick:{show:false}},
+      yAxis:{type:'value',name:'万人',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
+      series:[{
+        type:'bar',
+      animationDelay:function(idx){return idx*150;},animationEasing:'elasticOut',animationDuration:1800,barWidth:'48%',
+        data:[
+          {value:3000,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#d4a96f'},{offset:1,color:'#b88a4e'}]}}},
+          {value:2000,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#7aabe0'},{offset:1,color:'#5a8bc8'}]}}},
+          {value:205,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#8cc89a'},{offset:1,color:'#6ba878'}]}}},
+          {value:120,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#dab5b5'},{offset:1,color:'#c49595'}]}}},
+          {value:28,itemStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:'#ae9cc0'},{offset:1,color:'#8e7ca0'}]}}}
+        ],
+        label:{show:true,position:'top',color:'#5c5248',fontSize:12,formatter:function(p){return p.value;}},
+        itemStyle:{borderRadius:[6,6,0,0],shadowColor:'rgba(0,0,0,0.08)',shadowBlur:6,shadowOffsetY:3}
+      }]
+    });
+    setTimeout(function(){chart.resize();}, 200);
+    window.addEventListener('resize',function(){chart.resize();});
+  }
+  if(document.readyState === 'complete'){
+    init();
+  } else {
+    window.addEventListener('load', init);
+  }
+  setTimeout(init, 500);
+})();
 </script>
 </body>
 </html>

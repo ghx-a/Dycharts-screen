@@ -10,41 +10,74 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;width:100%;overflow:hidden}
 body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;
-  background:#f8f4ec;
-  background-image:radial-gradient(circle at 20% 20%, rgba(255,255,255,0.6) 0%, transparent 60%), linear-gradient(135deg, #faf7f1 0%, #f2ece1 100%);}
+  background:#f8f4e6;
+  }
 .wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 24px 6px}
 .title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:10px;flex-shrink:0;
   border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
-.chart{width:100%;flex:1;min-height:0}
+#chart{width:100%;height:320px;flex:1}
 .subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
   border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.title{animation:fadeInDown 0.8s ease-out}
+.subtitle{animation:fadeInUp 0.8s ease-out 0.4s both}
+#chart{animation:scaleIn 1s ease-out 0.2s both}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="title">发达国家华侨数量增长</div>
-  <div class="chart" id="chart"></div>
+  <div id="chart"></div>
   <div class="subtitle">数据来源：各国人口普查与移民局统计</div>
 </div>
 <script>
-var chart = echarts.init(document.getElementById('chart'));
-var option = {
+(function(){
+  function init(){
+    var dom = document.getElementById('chart');
+    if(!dom || typeof echarts === 'undefined'){
+      setTimeout(init, 100);
+      return;
+    }
+    var h = dom.offsetHeight || 320;
+    var w = dom.offsetWidth || 600;
+    var chart = echarts.init(dom, null, {width: w, height: h});
+    chart.setOption({
+animation:true,
+animationDuration:2200,
+animationDurationUpdate:900,
+animationEasing:'cubicOut',
+animationEasingUpdate:'cubicInOut',
+animationDelay:function(idx){return idx*120;},
+animationDelayUpdate:function(idx){return idx*60;},
+
   tooltip:{trigger:'axis'},
   legend:{data:['美国','日本','澳大利亚','加拿大','韩国'],top:'4%',textStyle:{color:'#5c5248'},itemWidth:18,itemHeight:10},
   grid:{left:'10%',right:'8%',top:'16%',bottom:'12%'},
   xAxis:{type:'category',data:['1980年代初','2006-2007年','2016-2017年'],axisLabel:{color:'#5c5248'},axisLine:{lineStyle:{color:'#d8d0c4'}}},
   yAxis:{type:'value',name:'万人',nameTextStyle:{color:'#5c5248'},axisLabel:{color:'#5c5248'},splitLine:{lineStyle:{color:'#ece6dc',type:'dashed'}}},
   series:[
-    {name:'美国',type:'line',smooth:true,data:[81.2,356.5,508],itemStyle:{color:'#c49a6c'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
-    {name:'日本',type:'line',smooth:true,data:[5.5,60.7,90],itemStyle:{color:'#6a9bd8'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
-    {name:'澳大利亚',type:'line',smooth:true,data:[15,70,86.6],itemStyle:{color:'#7cb88a'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
-    {name:'加拿大',type:'line',smooth:true,data:[30,121,177],itemStyle:{color:'#d4a5a5'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
-    {name:'韩国',type:'line',smooth:true,data:[3,50,57],itemStyle:{color:'#9e8cb8'},lineStyle:{width:3},symbol:'circle',symbolSize:8}
+    {name:'美国',type:'line',
+      animationDuration:2500,animationEasing:'cubicOut',animationDelay:function(idx){return idx*100;},smooth:true,data:[81.2,356.5,508],itemStyle:{color:'#c49a6c'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
+    {name:'日本',type:'line',
+      animationDuration:2500,animationEasing:'cubicOut',animationDelay:function(idx){return idx*100;},smooth:true,data:[5.5,60.7,90],itemStyle:{color:'#6a9bd8'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
+    {name:'澳大利亚',type:'line',
+      animationDuration:2500,animationEasing:'cubicOut',animationDelay:function(idx){return idx*100;},smooth:true,data:[15,70,86.6],itemStyle:{color:'#7cb88a'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
+    {name:'加拿大',type:'line',
+      animationDuration:2500,animationEasing:'cubicOut',animationDelay:function(idx){return idx*100;},smooth:true,data:[30,121,177],itemStyle:{color:'#d4a5a5'},lineStyle:{width:3},symbol:'circle',symbolSize:8},
+    {name:'韩国',type:'line',
+      animationDuration:2500,animationEasing:'cubicOut',animationDelay:function(idx){return idx*100;},smooth:true,data:[3,50,57],itemStyle:{color:'#9e8cb8'},lineStyle:{width:3},symbol:'circle',symbolSize:8}
   ]
 
-};
-chart.setOption(option);
-window.addEventListener('resize',function(){chart.resize();});
+    });
+    setTimeout(function(){chart.resize();}, 200);
+    window.addEventListener('resize',function(){chart.resize();});
+  }
+  if(document.readyState === 'complete'){init();} else {window.addEventListener('load', init);}
+  setTimeout(init, 500);
+})();
 </script>
 </body>
 </html>
