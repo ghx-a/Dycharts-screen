@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全国侨乡地理分布词云图</title>
+<script src="echarts.min.js"></script>
+<script src="echarts-wordcloud.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;width:100%;overflow:hidden}
+body{font-family:'Microsoft YaHei','Noto Sans SC',sans-serif;background:#F8F4E6}
+.wrap{position:relative;width:100%;height:100%;display:flex;flex-direction:column;align-items:center;padding:8px 20px 6px}
+.title{width:100%;text-align:center;font-size:17px;font-weight:700;color:#4a4035;letter-spacing:1.5px;padding-top:8px;flex-shrink:0;
+  border-bottom:1px solid rgba(196,154,108,0.25);padding-bottom:8px;margin-bottom:4px}
+#chart{width:100%;flex:1;min-height:0}
+.subtitle{width:100%;text-align:center;font-size:11px;color:#9a8f82;padding-top:6px;flex-shrink:0;
+  border-top:1px solid rgba(196,154,108,0.2);padding-bottom:4px}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes scaleIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+.title{animation:fadeInDown 0.8s ease-out}
+.subtitle{animation:fadeInUp 0.8s ease-out 0.4s both}
+#chart{animation:scaleIn 1s ease-out 0.2s both}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">全国侨乡地理分布</div>
+  <div id="chart"></div>
+  <div class="subtitle">数据来源：广东省人民政府、江门/梅州/泉州/福州/天门市人民政府、中华全国归国华侨联合会等公开资料</div>
+</div>
+<script>
+(function(){
+  function init(){
+    var dom = document.getElementById('chart');
+    if(!dom || typeof echarts === 'undefined'){setTimeout(init, 100); return;}
+    var h = dom.offsetHeight || 400;
+    var w = dom.offsetWidth || 600;
+    var chart = echarts.init(dom, null, {width: w, height: h});
+
+    // 纯地名数据，value为海外侨胞总量（万人）
+    // 字号由value决定：广东福建最大，潮汕江门泉州梅州温州天门次之，各省及城市中等，村镇最小
+    var data = [
+      // 第一梯队：省级（最大字号）
+      {"name": "广东", "value": 3000},
+      {"name": "福建", "value": 2000},
+      // 第二梯队：重点城市/地区（次大字号）
+      {"name": "潮汕", "value": 1500},
+      {"name": "泉州", "value": 948},
+      {"name": "江门", "value": 530},
+      {"name": "梅州", "value": 500},
+      {"name": "温州", "value": 83},
+      {"name": "天门", "value": 28},
+      // 第三梯队：省份及普通城市（中等字号）
+      {"name": "福州", "value": 460},
+      {"name": "浙江", "value": 205},
+      {"name": "汕尾", "value": 140},
+      {"name": "海南", "value": 120},
+      {"name": "文昌", "value": 120},
+      {"name": "青田", "value": 38},
+      {"name": "和顺", "value": 3},
+      // 第四梯队：村镇（最小字号）
+      {"name": "马湾镇", "value": 3.4},
+      {"name": "梧林社区", "value": 1.8},
+      {"name": "前美村", "value": 1.0},
+      {"name": "黎塘村", "value": 0.4},
+      {"name": "鸿渐村", "value": 0.13},
+      {"name": "坭湾村", "value": 0.03}
+    ];
+
+    // 配色：warm brown/gold系，按梯队分色
+    var tier1Colors = ['#8a4032','#9a4a3a'];
+    var tier2Colors = ['#b07d4a','#c49a6c','#a66e3f'];
+    var tier3Colors = ['#7a5c3a','#8a6a4b','#9a7d5a','#6a8a9a','#5a8a7a'];
+    var tier4Colors = ['#ae9cc0','#94c4d6','#8ab6c9','#bc9a86','#d8b4a6'];
+
+    function getColor(idx, value){
+      if(value >= 1000) return tier1Colors[idx % tier1Colors.length];
+      if(value >= 28) return tier2Colors[idx % tier2Colors.length];
+      if(value >= 1) return tier3Colors[idx % tier3Colors.length];
+      return tier4Colors[idx % tier4Colors.length];
+    }
+
+    chart.setOption({
+      animation: true,
+      animationDuration: 2000,
+      animationEasing: 'cubicOut',
+      tooltip: {
+        show: true,
+        formatter: function(p){
+          var v = p.data.value;
+          if(v >= 1) return p.name + '：海外侨胞约 ' + v + ' 万人';
+          return p.name + '：海外侨胞约 ' + (v * 10000) + ' 人';
+        },
+        backgroundColor: 'rgba(248,244,230,0.95)',
+        borderColor: 'rgba(196,154,108,0.5)',
+        textStyle: {color: '#4a4035'}
+      },
+      series: [{
+        type: 'wordCloud',
+        shape: 'circle',
+        left: 'center',
+        top: 'center',
+        width: '100%',
+        height: '100%',
+        sizeRange: [16, 95],
+        rotationRange: [-30, 30],
+        rotationStep: 15,
+        gridSize: 5,
+        drawOutOfBound: false,
+        layoutAnimation: true,
+        textStyle: {
+          fontFamily: 'Microsoft YaHei, Noto Sans SC, sans-serif',
+          fontWeight: 'bold',
+          color: function(){
+            var idx = Math.floor(Math.random() * 15);
+            var palette = tier1Colors.concat(tier2Colors).concat(tier3Colors).concat(tier4Colors);
+            return palette[idx % palette.length];
+          }
+        },
+        emphasis: {
+          focus: 'self',
+          textStyle: {
+            shadowBlur: 10,
+            shadowColor: 'rgba(0,0,0,0.2)'
+          }
+        },
+        data: data
+      }]
+    });
+
+    setTimeout(function(){ chart.resize(); }, 300);
+    window.addEventListener('resize', function(){ chart.resize(); });
+  }
+  if(document.readyState === 'complete'){init();}
+  else {window.addEventListener('load', init);}
+  setTimeout(init, 500);
+})();
+</script>
+</body>
+</html>
